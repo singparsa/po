@@ -1,63 +1,51 @@
-let timerInterval;
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Focus Guard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-function startStudyMode() {
-  const minutes = document.getElementById("studyTime").value;
+  <div class="container">
+    <h1>📵 Focus Guard</h1>
+    <p>스마트폰 과사용 방지 앱</p>
 
-  if (!minutes || minutes <= 0) {
-    alert("공부 시간을 입력하세요.");
-    return;
-  }
+    <div class="card">
+      <h2>📚 공부 집중 모드</h2>
 
-  document.getElementById("overlay").style.display = "flex";
+      <label>공부 시간 설정 (분)</label>
+      <input type="number" id="studyTime" placeholder="예: 30">
 
-  let totalSeconds = minutes * 60;
+      <button onclick="startStudyMode()">집중 시작</button>
 
-  updateTimer(totalSeconds);
+      <h3 id="timer">00:00</h3>
+    </div>
 
-  timerInterval = setInterval(() => {
-    totalSeconds--;
+    <div class="card">
+      <h2>🌙 수면 모드</h2>
 
-    updateTimer(totalSeconds);
+      <button onclick="startSleepMode()">수면 모드 시작</button>
+    </div>
+  </div>
 
-    if (totalSeconds <= 0) {
-      clearInterval(timerInterval);
+  <div id="overlay">
+    <div class="overlay-content">
+      <h1>🚫 집중 중입니다</h1>
+      <p>지금은 공부 시간입니다.</p>
+      <button onclick="exitMode()">종료</button>
+    </div>
+  </div>
 
-      alert("집중 시간이 종료되었습니다!");
+  <div id="sleepOverlay">
+    <div class="overlay-content">
+      <h1>😴 수면 시간입니다</h1>
+      <p>스마트폰 사용을 줄여보세요.</p>
+      <button onclick="exitSleepMode()">해제</button>
+    </div>
+  </div>
 
-      exitMode();
-    }
-  }, 1000);
-
-  openFullscreen();
-}
-
-function updateTimer(seconds) {
-  const min = String(Math.floor(seconds / 60)).padStart(2, '0');
-  const sec = String(seconds % 60).padStart(2, '0');
-
-  document.getElementById("timer").innerText = `${min}:${sec}`;
-}
-
-function exitMode() {
-  clearInterval(timerInterval);
-
-  document.getElementById("overlay").style.display = "none";
-}
-
-function startSleepMode() {
-  document.getElementById("sleepOverlay").style.display = "flex";
-
-  openFullscreen();
-}
-
-function exitSleepMode() {
-  document.getElementById("sleepOverlay").style.display = "none";
-}
-
-function openFullscreen() {
-  const elem = document.documentElement;
-
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  }
-}
+  <script src="script.js"></script>
+</body>
+</html>
