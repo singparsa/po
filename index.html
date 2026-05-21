@@ -1,78 +1,56 @@
-let timerInterval;
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Focus Guard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-function startStudyMode() {
-  const minutes = document.getElementById("studyTime").value;
+  <div class="container">
+    <div class="app-card">
+      <h1>📵 Focus Guard</h1>
+      <p class="subtitle">학생을 위한 스마트폰 과사용 방지 웹앱</p>
 
-  if (!minutes || minutes <= 0) {
-    alert("공부 시간을 입력하세요.");
-    return;
-  }
+      <div class="section">
+        <h2>📚 공부 집중 모드</h2>
 
-  // 검은 집중 화면 표시
-  document.getElementById("overlay").style.display = "flex";
+        <label>공부 시간 설정 (분)</label>
+        <input type="number" id="studyTime" placeholder="예: 30">
 
-  let totalSeconds = minutes * 60;
+        <button onclick="startStudyMode()">집중 시작</button>
 
-  updateOverlayTimer(totalSeconds);
+        <div class="timer-box">
+          <h3 id="timer">00:00</h3>
+        </div>
+      </div>
 
-  openFullscreen();
+      <div class="section">
+        <h2>🌙 수면 모드</h2>
 
-  timerInterval = setInterval(() => {
-    totalSeconds--;
+        <button onclick="startSleepMode()">수면 모드 시작</button>
+      </div>
+    </div>
+  </div>
 
-    updateOverlayTimer(totalSeconds);
+  <div id="overlay">
+    <div class="overlay-content">
+      <h1>🚫 집중 중입니다</h1>
+      <p>지금은 공부 시간입니다.</p>
+      <button onclick="exitMode()">집중 종료</button>
+    </div>
+  </div>
 
-    if (totalSeconds <= 0) {
-      clearInterval(timerInterval);
+  <div id="sleepOverlay">
+    <div class="overlay-content">
+      <h1>😴 수면 시간입니다</h1>
+      <p>좋은 수면은 건강한 하루를 만듭니다.</p>
+      <button onclick="exitSleepMode()">수면 모드 해제</button>
+    </div>
+  </div>
 
-      resetToHome();
-    }
-  }, 1000);
-}
+  <script src="script.js"></script>
 
-// 검은 화면 타이머 업데이트
-function updateOverlayTimer(seconds) {
-  const min = String(Math.floor(seconds / 60)).padStart(2, "0");
-  const sec = String(seconds % 60).padStart(2, "0");
-
-  document.getElementById("overlayTimer").innerText = `${min}:${sec}`;
-}
-
-// 처음 화면으로 복귀
-function resetToHome() {
-  document.getElementById("overlay").style.display = "none";
-
-  document.getElementById("studyTime").value = "";
-
-  closeFullscreen();
-}
-
-// 수면 모드
-function startSleepMode() {
-  document.getElementById("sleepOverlay").style.display = "flex";
-
-  openFullscreen();
-}
-
-// 수면 모드 종료
-function exitSleepMode() {
-  document.getElementById("sleepOverlay").style.display = "none";
-
-  closeFullscreen();
-}
-
-// 전체화면 실행
-function openFullscreen() {
-  const elem = document.documentElement;
-
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  }
-}
-
-// 전체화면 종료
-function closeFullscreen() {
-  if (document.fullscreenElement) {
-    document.exitFullscreen();
-  }
-}
+</body>
+</html>
